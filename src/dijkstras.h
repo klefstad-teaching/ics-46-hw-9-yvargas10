@@ -9,6 +9,8 @@ using namespace std;
 
 constexpr int INF = numeric_limits<int>::max();
 
+constexpr int UNDEFINED = -1;
+
 struct Edge {
     int src=0;
     int dst=0;
