@@ -5,11 +5,34 @@ void error(string word1, string word2, string msg) {
 }
 
 bool edit_distance_within(const std::string& str1, const std::string& str2, int d) {
+	// case 1: differs by length one
+	int str1_length = str1.length();
+	int str2_length = str2.length();
 	
+	int length_diff = abs(str1_length - str2_length);
+	if (length_diff > 1) { return false; }
+
+	// same chars plus one
+	// case 2: differs by one letter
+	int extra;
+	int i = 0, j = 0;
+	while (i < str1_length && j < str2_length) {
+		if (str1[i] != str2[j]) {
+			++extra;
+			if (extra > 1) { return false; }
+			
+			if (str1_length > str2_length) { ++i; }
+			else if (str1_length < str2_length) { ++j; }
+			else if (str1_length == str2_length) { ++i; ++j; }
+		} else {
+			++i; ++j;
+		}
+	}
+	return true;	
 }
 
 bool is_adjacent(const string& word1, const string& word2) {
-	
+	return edit_distance_within(word1, word2, 1);
 }
 
 vector<string> generate_word_ladder(const string& begin_word, const string& end_word, const set<string>& word_list) {
@@ -25,7 +48,7 @@ vector<string> generate_word_ladder(const string& begin_word, const string& end_
 		
 		for (string word : word_list) {
 			if (is_adjacent(last_word, word)) {
-				if (!visited.count(word))) { // word not in visited
+				if (!visited.count(word)) { // word not in visited
 					visited.insert(word);
 					vector<string> new_ladder = ladder;
 					new_ladder.push_back(word);
@@ -60,8 +83,4 @@ void print_word_ladder(const vector<string>& ladder) {
 		cout << word << " -> ";
 	}
 	cout << endl;
-}
-
-void verify_word_ladder() {
-	
 }
